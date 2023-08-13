@@ -92,3 +92,22 @@ html span {
   width: 700px;
   margin: 0 auto;
 }
+
+.weekdayTitleContainer .weekWrap {
+  padding: 20px 20px 10px;
+  width: 60px;
+  display: inline-block;
+  text-align: center;
+  font-size: 2.2rem;
+}
+
+.calendarWrap {
+  display: inline-block;
+}
+
+.calendarWrap .dayCellsContainer {
+  width: 700px;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto;
+}
