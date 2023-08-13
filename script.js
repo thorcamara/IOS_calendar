@@ -98,3 +98,64 @@ class MonthControls extends React.Component {
     return React.createElement("div", { className: "arrow-wrap" }, React.createElement("div", { className: `arrow ${dir}`, onClick: () => { this.handleArrowClick(dir); } }));
   }
 }
+
+class Calendar extends React.Component{
+  constructor(props){
+      super(props);
+      let today = new Date();
+      let defaultDay = today.getDate();
+      let defaultMonth = today.getMonth() + 1;
+      let defaultYear = today.getFullYear();
+      let defaultDayClicked = `${defaultDay}${defaultMonth}${defaultYear}`;
+      this.state = {
+          month: defaultMonth,
+          year: defaultYear,
+          dayIsClicked: defaultDayClicked,
+          prevMonth: undefined
+      };
+
+      this.handleDayClicked = this.handleDayClicked.bind(this);
+      this.handleMonthChange = this.handleMonthChange.bind(this);
+
+  }
+
+  handleDayClicked(id){
+      this.setState({
+          dayIsClicked: id
+      });
+  }
+
+  handleMonthChange(dir){
+      const { month, year } = this.state;
+      if(dir === "left"){
+          if(month === 1){
+              this.setState({
+                  year: year - 1,
+                  month: 12,
+                  prevMonth: 1
+              });
+          }else{
+              this.setState({
+                  month: month - 1,
+                  prevMonth: month
+              });
+          }
+      }
+
+      if(dir === "right"){
+          if(month === 12){
+              this.setState({
+                  year: year + 1,
+                  month: 1,
+                  prevMonth: 12
+              });
+          }else{
+              this.setState({
+                  month: month + 1,
+                  prevMonth: month
+              });
+          }
+      }
+
+  }
+}
