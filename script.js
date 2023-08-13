@@ -68,4 +68,33 @@ class DayCells extends React.Component {
       this.props.onDayClicked(id);
     }
   }
+  render() {
+    const { month, year, dayIsClicked } = this.props;
+    var currentMonthArr = this.calcDayCells(month, year);
+
+    const arr = [];
+    const renderCalendar = dayIsClicked => {
+      currentMonthArr.map(item => {
+        var style = item.key === dayIsClicked && item.key[0] !== "b" ? "dayNum selected" : "dayNum";
+        arr.push(
+          React.createElement("div", { key: item.key, className: item.className, onClick: () => { this.handleDayClick(item.key); }, onTuch: () => { this.handleDayClick(item.key); } }, React.createElement("span", { className: style }, item.dayNum))
+        );
+      });
+      return React.createElement("div", { className: "dayCellsContainer" }, arr);
+    };
+    return (
+      React.createElement("div", { className: "calendarWrap" }, renderCalendar(dayIsClicked))
+    );
+  }
+
+}
+
+class MonthControls extends React.Component {
+  handleArrowClick(dir) {
+    this.props.onArrowClick(dir);
+  }
+  render() {
+    const { dir } = this.props;
+    return React.createElement("div", { className: "arrow-wrap" }, React.createElement("div", { className: `arrow ${dir}`, onClick: () => { this.handleArrowClick(dir); } }));
+  }
 }
