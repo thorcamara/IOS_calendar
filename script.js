@@ -9,19 +9,63 @@ const swipeRestraint = 200;
 
 const weekdays = ["", "sun", "mon", "tue", "wed", "thr", "fri", "sat"];
 
-const MonYearTitle = (props) => 
-  React.createElement("div", { className: "monthYearTitleContainer" }, 
-    React.createElement("div", { className: "monthWrap" }, props.month), 
+const MonYearTitle = (props) =>
+  React.createElement("div", { className: "monthYearTitleContainer" },
+    React.createElement("div", { className: "monthWrap" }, props.month),
     React.createElement("div", { className: "yearWrap" }, props.year));
 
 
 
-const WeekdayTitle = () => 
-  React.createElement("div", { className: "weekdayTitleContainer" }, 
-    React.createElement("div", { className: "weekWrap" }, "Sun"), 
-    React.createElement("div", { className: "weekWrap" }, "Mon"), 
-    React.createElement("div", { className: "weekWrap" }, "Tue"), 
-    React.createElement("div", { className: "weekWrap" }, "Wed"), 
-    React.createElement("div", { className: "weekWrap" }, "Thr"), 
-    React.createElement("div", { className: "weekWrap" }, "Fri"), 
+const WeekdayTitle = () =>
+  React.createElement("div", { className: "weekdayTitleContainer" },
+    React.createElement("div", { className: "weekWrap" }, "Sun"),
+    React.createElement("div", { className: "weekWrap" }, "Mon"),
+    React.createElement("div", { className: "weekWrap" }, "Tue"),
+    React.createElement("div", { className: "weekWrap" }, "Wed"),
+    React.createElement("div", { className: "weekWrap" }, "Thr"),
+    React.createElement("div", { className: "weekWrap" }, "Fri"),
     React.createElement("div", { className: "weekWrap" }, "Sat"));
+
+class DayCells extends React.Component {
+  calcDayCells(month, year) {
+    let numOfDays = new Date(year, month, 0).getDate();
+    let firstDay = new Date(year, month - 1, 1).getDay();
+
+    let rows = [];
+    let i = 0;
+    while (i++ < firstDay) {
+      rows.push({
+        key: `blank${i}${month}${year}`,
+        className: "cell-blank",
+        dayNum: ""
+      });
+    }
+    let day = 1;
+
+    while (day <= numOfDays) {
+      var flexOrder = day & 7 === 0 ? weekdays[7] : weekdays[day % 7];
+      const styleName = `cell ${flexOrder}`;
+      const id = `${day}${month}${year}`;
+      rows.push({
+        key: id,
+        className: styleName,
+        dayNum: day++
+      });
+    }
+
+    return rows;
+
+  }
+
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.month !== nextProps.month) {
+      console.log("Month Changed!");
+    }
+  }
+  handleDayClick(id) {
+    if (id[0] !== 'b') {
+      this.props.onDayClicked(id);
+    }
+  }
+}
