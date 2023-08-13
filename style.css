@@ -162,3 +162,60 @@ html span {
   transform: rotate(-135deg);
   margin: 200px 0 0 730px;
 }
+
+@media screen and (max-width: 768px) {
+  html {
+    height: 120vh;
+    font-size: 8.8px;
+  }
+
+  html body {
+    margin: 0 5px;
+  }
+
+  .calendarContainer {
+    max-width: 100vw;
+    min-width: 320px;
+    margin: 0;
+    position: fixed;
+  }
+
+  .calendarContainer .dayCellsViewPort {
+    max-width: 100vw;
+    overflow: visible;
+  }
+
+  .monthYearTitleContainer {
+    width: 100vw;
+    min-width: 320px;
+    max-width: 100vw;
+  }
+
+  .monthYearTitleContainer .monthWrap {
+    padding: 20px 5px 0 8px;
+  }
+
+  .weekdayTitleContainer {
+    width: 100vw;
+    max-width: 100vw;
+    min-width: 320px;
+    margin: 0;
+  }
+
+  .weekdayTitleContainer .weekWrap {
+    width: 14vw;
+    padding: 10px 0;
+  }
+
+  .calendarWrap .dayCellsContainer {
+    width: 100vw;
+    min-width: 320px;
+    max-width: 100vw;
+  }
+
+  .calendarWrap .dayCellsContainer .cell,
+  .calendarContainer .dayCellsContainer .cell-blank {
+    width: 14vw;
+    padding: 15px 0 10px;
+  }
+}
