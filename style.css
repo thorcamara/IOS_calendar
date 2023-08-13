@@ -46,3 +46,18 @@ html span {
 .carouselInc-leave {
   margin-left: -1400px;
 }
+
+.carouselInc-leave-active {
+  margin-left: -1400px;
+  transition: all 300ms linear;
+}
+
+
+.carouselDec-enter {
+  margin-left: -700px;
+}
+
+.carouselDec-enter-active {
+  margin-left: 0;
+  transition: all 300ms linear;
+}
