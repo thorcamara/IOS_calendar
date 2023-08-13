@@ -33,3 +33,16 @@ html span {
   width: 1400px;
   height: 490px;
 }
+
+.carouselInc-enter {
+  margin-left: 700px;
+}
+
+.carouselInc-enter-active {
+  margin-left: 0;
+  transition: all 300ms linear;
+}
+
+.carouselInc-leave {
+  margin-left: -1400px;
+}
