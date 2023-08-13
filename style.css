@@ -16,3 +16,20 @@ html body {
 html span {
   vertical-align: top;
 }
+
+.calendarContainer {
+  width: 700px;
+  margin: 0 auto;
+}
+
+.calendarContainer .dayCellsViewPort {
+  width: 720px;
+  height: 100%;
+  position: absolute;
+  overflow: hidden;
+}
+
+.calendarContainer .dayCellsViewPort .dayCellsWrap {
+  width: 1400px;
+  height: 490px;
+}
