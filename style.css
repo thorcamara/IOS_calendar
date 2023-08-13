@@ -77,3 +77,18 @@ html span {
   text-align: center;
   color: #ff3b30;
 }
+
+.monthYearTitleContainer .monthWrap {
+  padding: 20px 5px 0 0;
+  font-size: 3rem;
+}
+
+.monthYearTitleContainer .yearWrap {
+  padding: 20px 0 0 5px;
+  font-size: 2rem;
+}
+
+.weekdayTitleContainer {
+  width: 700px;
+  margin: 0 auto;
+}
