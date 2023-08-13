@@ -159,3 +159,65 @@ class Calendar extends React.Component{
 
   }
 }
+
+handleSwipeEvent(e, action){
+  const touchEventObj = e.changedTouches[0];
+  if(action === "start"){
+      startX = touchEventObj.screenX;
+      startY = touchEventObj.screenY;
+      startTime = new Date().getTime();
+  }else if(action === "end"){
+      elapsedTime = new Date().getTime() - startTime;
+      if(elapsedTime >= swipeTimeSpan){
+          if(Math.abs(offsetX) >= swipeMinOffset && Math.abs(offsetY) <= swipeRestraint){
+              this.handleMonthChange(dir);
+          }
+          offsetX = 0;
+          offsetY = 0;
+      }
+  }else{
+      offsetX = touchEventObj.screenX - startX;
+      offsetY = touchEventObj.screenY - startY;
+      if(Math.abs(offsetX) > Math.abs(offsetY)){
+          dir = offsetX < 0 ? "right" : "left";
+      }
+  }
+}
+
+componentDidMount(){
+  document.addEventListener("touchstart", function(){}, true);
+}
+
+render() {
+  const { month, year, dayIsClicked, prevMonth } = this.state;
+  function monthChangeComp(prevMonth, month){
+      if(month === 12 && prevMonth === 1){
+          return "carouselDec";
+      }else{
+          if (month > prevMonth){
+              return "carouselInc";
+          }else{
+              return "carouselDec";
+          }
+      }
+  };
+
+  const transitionStyle = monthChangeComp(prevMonth, month);
+  return (
+      React.createElement("div", { className: "calendarContainer"}, React.createElement(MonYearTitle, { month: months[month], year: year}), React.createElement(WeekdayTitle, null), React.createElement("div", { className: "dayCellsViewPort", onTouchStart: e => this.handleSwipeEvent(e, "start"), onTouchMove: e => this.handleSwipeEvent(e, "move"), onTouchEnd: e => this.handleSwipeEvent(e, "end")}, React.createElement("div", {className: "dayCellsWrap"}, React.createElement(ReactCSSTransitionGroup, {
+          className: "animOffset",
+          transitionName: `${transitionStyle}`,
+          transitionEnterTimeout: 300,
+          transitionLeaveTimeout: 300
+      }, React.createElement(DayCells, { key: `${month}${year}`, month: month, year: year, dayIsClicked: dayIsClicked, onDayClicked: this.handleDayClicked})))), React.createElement(MonthControls, { dir: "left", onArrowClick: this.handleMonthChange}), React.createElement(MonthControls, { dir: "right", onArrowClick: this.handleMonthChange}))
+  );
+
+}
+
+
+}
+
+ReactDOM.render(
+React.createElement("div", null, React.createElement(Calendar, null)),
+document.getElementById('app')
+);
