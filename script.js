@@ -68,6 +68,7 @@ class DayCells extends React.Component {
       this.props.onDayClicked(id);
     }
   }
+
   render() {
     const { month, year, dayIsClicked } = this.props;
     var currentMonthArr = this.calcDayCells(month, year);
@@ -99,125 +100,124 @@ class MonthControls extends React.Component {
   }
 }
 
-class Calendar extends React.Component{
-  constructor(props){
-      super(props);
-      let today = new Date();
-      let defaultDay = today.getDate();
-      let defaultMonth = today.getMonth() + 1;
-      let defaultYear = today.getFullYear();
-      let defaultDayClicked = `${defaultDay}${defaultMonth}${defaultYear}`;
-      this.state = {
-          month: defaultMonth,
-          year: defaultYear,
-          dayIsClicked: defaultDayClicked,
-          prevMonth: undefined
-      };
+class Calendar extends React.Component {
+  constructor(props) {
+    super(props);
+    let today = new Date();
+    let defaultDay = today.getDate();
+    let defaultMonth = today.getMonth() + 1;
+    let defaultYear = today.getFullYear();
+    let defaultDayClicked = `${defaultDay}${defaultMonth}${defaultYear}`;
+    this.state = {
+      month: defaultMonth,
+      year: defaultYear,
+      dayIsClicked: defaultDayClicked,
+      prevMonth: undefined
+    };
 
-      this.handleDayClicked = this.handleDayClicked.bind(this);
-      this.handleMonthChange = this.handleMonthChange.bind(this);
+    this.handleDayClicked = this.handleDayClicked.bind(this);
+    this.handleMonthChange = this.handleMonthChange.bind(this);
 
   }
 
-  handleDayClicked(id){
-      this.setState({
-          dayIsClicked: id
-      });
+  handleDayClicked(id) {
+    this.setState({
+      dayIsClicked: id
+    });
   }
 
-  handleMonthChange(dir){
-      const { month, year } = this.state;
-      if(dir === "left"){
-          if(month === 1){
-              this.setState({
-                  year: year - 1,
-                  month: 12,
-                  prevMonth: 1
-              });
-          }else{
-              this.setState({
-                  month: month - 1,
-                  prevMonth: month
-              });
-          }
+  handleMonthChange(dir) {
+    const { month, year } = this.state;
+    if (dir === "left") {
+      if (month === 1) {
+        this.setState({
+          year: year - 1,
+          month: 12,
+          prevMonth: 1
+        });
+      } else {
+        this.setState({
+          month: month - 1,
+          prevMonth: month
+        });
       }
+    }
 
-      if(dir === "right"){
-          if(month === 12){
-              this.setState({
-                  year: year + 1,
-                  month: 1,
-                  prevMonth: 12
-              });
-          }else{
-              this.setState({
-                  month: month + 1,
-                  prevMonth: month
-              });
-          }
+    if (dir === "right") {
+      if (month === 12) {
+        this.setState({
+          year: year + 1,
+          month: 1,
+          prevMonth: 12
+        });
+      } else {
+        this.setState({
+          month: month + 1,
+          prevMonth: month
+        });
       }
+    }
 
   }
-}
 
-handleSwipeEvent(e, action){
-  const touchEventObj = e.changedTouches[0];
-  if(action === "start"){
+  handleSwipeEvent(e, action) {
+    const touchEventObj = e.changedTouches[0];
+    if (action === "start") {
       startX = touchEventObj.screenX;
       startY = touchEventObj.screenY;
       startTime = new Date().getTime();
-  }else if(action === "end"){
+    } else if (action === "end") {
       elapsedTime = new Date().getTime() - startTime;
-      if(elapsedTime >= swipeTimeSpan){
-          if(Math.abs(offsetX) >= swipeMinOffset && Math.abs(offsetY) <= swipeRestraint){
-              this.handleMonthChange(dir);
-          }
-          offsetX = 0;
-          offsetY = 0;
+      if (elapsedTime >= swipeTimeSpan) {
+        if (Math.abs(offsetX) >= swipeMinOffset && Math.abs(offsetY) <= swipeRestraint) {
+          this.handleMonthChange(dir);
+        }
+        offsetX = 0;
+        offsetY = 0;
       }
-  }else{
+    } else {
       offsetX = touchEventObj.screenX - startX;
       offsetY = touchEventObj.screenY - startY;
-      if(Math.abs(offsetX) > Math.abs(offsetY)){
-          dir = offsetX < 0 ? "right" : "left";
+      if (Math.abs(offsetX) > Math.abs(offsetY)) {
+        dir = offsetX < 0 ? "right" : "left";
       }
+    }
   }
-}
 
-componentDidMount(){
-  document.addEventListener("touchstart", function(){}, true);
-}
+  componentDidMount() {
+    document.addEventListener("touchstart", function () { }, true);
+  }
 
-render() {
-  const { month, year, dayIsClicked, prevMonth } = this.state;
-  function monthChangeComp(prevMonth, month){
-      if(month === 12 && prevMonth === 1){
+  render() {
+    const { month, year, dayIsClicked, prevMonth } = this.state;
+    function monthChangeComp(prevMonth, month) {
+      if (month === 12 && prevMonth === 1) {
+        return "carouselDec";
+      } else {
+        if (month > prevMonth) {
+          return "carouselInc";
+        } else {
           return "carouselDec";
-      }else{
-          if (month > prevMonth){
-              return "carouselInc";
-          }else{
-              return "carouselDec";
-          }
+        }
       }
-  };
+    };
 
-  const transitionStyle = monthChangeComp(prevMonth, month);
-  return (
-      React.createElement("div", { className: "calendarContainer"}, React.createElement(MonYearTitle, { month: months[month], year: year}), React.createElement(WeekdayTitle, null), React.createElement("div", { className: "dayCellsViewPort", onTouchStart: e => this.handleSwipeEvent(e, "start"), onTouchMove: e => this.handleSwipeEvent(e, "move"), onTouchEnd: e => this.handleSwipeEvent(e, "end")}, React.createElement("div", {className: "dayCellsWrap"}, React.createElement(ReactCSSTransitionGroup, {
-          className: "animOffset",
-          transitionName: `${transitionStyle}`,
-          transitionEnterTimeout: 300,
-          transitionLeaveTimeout: 300
-      }, React.createElement(DayCells, { key: `${month}${year}`, month: month, year: year, dayIsClicked: dayIsClicked, onDayClicked: this.handleDayClicked})))), React.createElement(MonthControls, { dir: "left", onArrowClick: this.handleMonthChange}), React.createElement(MonthControls, { dir: "right", onArrowClick: this.handleMonthChange}))
-  );
+    const transitionStyle = monthChangeComp(prevMonth, month);
+    return (
+      React.createElement("div", { className: "calendarContainer" }, React.createElement(MonYearTitle, { month: months[month], year: year }), React.createElement(WeekdayTitle, null), React.createElement("div", { className: "dayCellsViewPort", onTouchStart: e => this.handleSwipeEvent(e, "start"), onTouchMove: e => this.handleSwipeEvent(e, "move"), onTouchEnd: e => this.handleSwipeEvent(e, "end") }, React.createElement("div", { className: "dayCellsWrap" }, React.createElement(ReactCSSTransitionGroup, {
+        className: "animOffset",
+        transitionName: `${transitionStyle}`,
+        transitionEnterTimeout: 300,
+        transitionLeaveTimeout: 300
+      }, React.createElement(DayCells, { key: `${month}${year}`, month: month, year: year, dayIsClicked: dayIsClicked, onDayClicked: this.handleDayClicked })))), React.createElement(MonthControls, { dir: "left", onArrowClick: this.handleMonthChange }), React.createElement(MonthControls, { dir: "right", onArrowClick: this.handleMonthChange }))
+    );
 
-}
+  }
 
 
 }
 
 ReactDOM.render(
-React.createElement("div", null, React.createElement(Calendar, null)),
-document.getElementById('app')
+  React.createElement("div", null, React.createElement(Calendar, null)),
+  document.getElementById('app')
 );
